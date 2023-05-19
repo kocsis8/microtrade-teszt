@@ -10,16 +10,11 @@ import CardActions from "@mui/material/CardActions";
 import {yupResolver} from "@hookform/resolvers/yup";
 import { Company } from "../../models/Company"
 import * as yup from "yup";
-import ReactDOM from 'react-dom/client';
 import { firestore } from "../../firebase"
 import { addDoc, collection } from "@firebase/firestore"
-
 import "./addCompany.css";
-import { ClassSharp } from "@mui/icons-material";
-import { render } from "@testing-library/react";
-import Addemployee from "../addEmployee/addEnployee.conponent";
 
-
+// a form validáláshoz való yup schema
 const schema = yup.object().shape({
     Name: yup.string().required(),
     Email: yup.string().email().required(),
@@ -28,6 +23,7 @@ const schema = yup.object().shape({
 })
 
 export default function AddCompany() {
+    // hook-form változói
   const {
     register,
     handleSubmit,
@@ -39,7 +35,7 @@ export default function AddCompany() {
 
 
 
-
+//form sikeres validálása után lefutó esemény
   const onSubmit = (data) =>{
     const c = new Company(data.Name,data.Email,data.employeeNum,data.Description);
 
@@ -62,8 +58,7 @@ export default function AddCompany() {
 
   };
 
-  const [expanded, setExpanded] = React.useState(false);
-
+  //primary szint állít
   const theme = createTheme({
     palette: {
       primary: {

@@ -13,27 +13,35 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { firestore } from "../../firebase";
 import { addDoc, collection } from "@firebase/firestore";
-import  DescriptionConponent  from "../../conponents/Description/Description.Conponent"
+import DescriptionConponent from "../../conponents/Description/Description.Conponent";
 
+// a form validáláshoz való yup schema
 const schema = yup.object().shape({
-  Name: yup.string().required('A név mező kitöltése kötelező'),
-  Email: yup.string().email('Ez az email cím nem valid').required('A email mező kitöltése kötelező'),
-  employeeNum: yup.number().min(1,'Legalább 1 et meg kell adni').max(100,'maximum 100-at tud megadni').required('A dolgozok száma mező kitöltése kötelező'),
+  Name: yup.string().required("A név mező kitöltése kötelező"),
+  Email: yup
+    .string()
+    .email("Ez az email cím nem valid")
+    .required("A email mező kitöltése kötelező"),
+  employeeNum: yup
+    .number()
+    .min(1, "Legalább 1 et meg kell adni")
+    .max(100, "maximum 100-at tud megadni")
+    .required("A dolgozok száma mező kitöltése kötelező"),
 });
-let  isdesabled= false;
+// gomb inaktivitását állítja
+let isdesabled = false;
+// sikeres validáció utáni event
 const onSubmit = (data) => {
   const ref = collection(firestore, "Companys");
- isdesabled = true;
-  
+  isdesabled = true;
 
   try {
-     addDoc(ref, data);
-
+    addDoc(ref, data);
   } catch (e) {
     console.log(e);
   }
 };
-
+//primary szint állít
 const theme = createTheme({
   palette: {
     primary: {
@@ -43,7 +51,7 @@ const theme = createTheme({
 });
 
 function App() {
-  
+  // hook-form változói
   const {
     register,
     handleSubmit,
@@ -52,16 +60,20 @@ function App() {
     resolver: yupResolver(schema),
   });
 
+  // generálni volo formok száma
   const [alkalmazottSzam, setAlkalmazottSzam] = useState(0);
 
+  //változás utáni érték
   const handleAlkalmazottSzamChange = (event) => {
     setAlkalmazottSzam(Number(event.target.value));
   };
-
+  // formot generáló függvény
   const generateAlkalmazottak = () => {
     const alkalmazottak = [];
     for (let i = 0; i < alkalmazottSzam; i++) {
-      alkalmazottak.push(<AddemployeeConponent  value={isdesabled} key={i} index={i} />);
+      alkalmazottak.push(
+        <AddemployeeConponent value={isdesabled} key={i} index={i} />
+      );
     }
     return alkalmazottak;
   };
@@ -137,7 +149,7 @@ function App() {
             </form>
           </Card>
 
-          <DescriptionConponent/>
+          <DescriptionConponent />
         </div>
 
         <div className="grid-child">{generateAlkalmazottak()}</div>
